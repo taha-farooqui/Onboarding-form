@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client On-Boarding Form — Clerq Legal</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="form-shell">
+
+    <div class="form-card">
+      <div class="form-card-header" id="formCardHeader">
+        <img src="images/logo.png" alt="Clerq Legal" class="form-card-logo" />
+        <div class="progress-dots" id="progressDots"></div>
+      </div>
+      <button type="button" class="btn-back hidden" id="btnBack">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
+    <main class="form-main" id="formMain">
+
+      <!-- Step 1: Introduction -->
+      <div class="step" data-step="1">
+        <div class="step-content intro-content">
+          <div class="intro-heading">
+            <h1 class="step-title">Client On-Boarding Form</h1>
+            <p class="step-description">To set up your Clerq workspace, we need a few details about your firm, team, and existing tools.</p>
+          </div>
+          <ul class="intro-checklist">
+            <li>Firm details &amp; practice areas</li>
+            <li>Case management system &amp; API access</li>
+            <li>Users, browsers &amp; email preferences</li>
+            <li>Email templates &amp; USCIS / EOIR accounts</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Step 2: About Your Firm -->
+      <div class="step" data-step="2">
+        <div class="step-content">
+          <div class="step-heading">
+            <h2 class="step-title">About Your Firm</h2>
+            <p class="step-description">Please tell us about your firm in terms of Attorneys, practice areas as well as staffing.</p>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="firmName">Enter Your Firm's Name <span class="required-mark">*</span></label>
+            <input class="field-input" type="text" id="firmName" name="firmName" data-required="true" placeholder="e.g. Smith Immigration Law" />
+            <span class="field-error" id="firmName-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="numAttorneys">How many Attorneys are in the firm <span class="required-mark">*</span></label>
+            <input class="field-input" type="number" id="numAttorneys" name="numAttorneys" min="1" data-required="true" data-type="number" placeholder="e.g. 5" />
+            <span class="field-error" id="numAttorneys-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Please tell us about your practise areas <span class="required-mark">*</span></label>
+            <div class="options-grid" data-name="practiceAreas" data-mode="single" data-required="true">
+              <button type="button" class="option-card" data-value="Immigration Only"><span class="option-key">A</span><span class="option-text">Immigration Only</span></button>
+              <button type="button" class="option-card" data-value="Immigration & Criminal Law"><span class="option-key">B</span><span class="option-text">Immigration &amp; Criminal Law</span></button>
+              <button type="button" class="option-card" data-value="Immigration & Personal Injury"><span class="option-key">C</span><span class="option-text">Immigration &amp; Personal Injury</span></button>
+              <button type="button" class="option-card" data-value="Immigration & Family Law"><span class="option-key">D</span><span class="option-text">Immigration &amp; Family Law</span></button>
+              <button type="button" class="option-card" data-value="Immigration & Others"><span class="option-key">E</span><span class="option-text">Immigration &amp; Others</span></button>
+            </div>
+            <span class="field-error" id="practiceAreas-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Select Team Size <span class="required-mark">*</span></label>
+            <div class="custom-select" data-name="teamSize" data-required="true">
+              <div class="custom-select-trigger" tabindex="0">
+                <span class="custom-select-value placeholder">Select team size</span>
+                <svg class="custom-select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="custom-select-dropdown">
+                <div class="custom-select-option" data-value="1-5 Employees">1–5 Employees</div>
+                <div class="custom-select-option" data-value="6-15 Employees">6–15 Employees</div>
+                <div class="custom-select-option" data-value="16-50 Employees">16–50 Employees</div>
+                <div class="custom-select-option" data-value="50+ Employees">50+ Employees</div>
+              </div>
+            </div>
+            <span class="field-error" id="teamSize-error"></span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Step 3: Case Management System -->
+      <div class="step" data-step="3">
+        <div class="step-content">
+          <div class="step-heading">
+            <h2 class="step-title">Identify Your Case Management System</h2>
+            <p class="step-description">Clerq will sync directly with your existing case management platform to update case files, calendar deadlines, and automate client communications.</p>
+          </div>
+
+          <img src="images/step2-image.jpg" alt="" class="step-image" />
+
+          <div class="field-group">
+            <p class="field-label">Please select your case management system from the list below. If you use multiple systems please select both or all.</p>
+            <div class="options-grid" data-name="cmsSystem" data-mode="multi">
+              <button type="button" class="option-card" data-value="Docketwise"><span class="option-key">A</span><span class="option-text">Docketwise</span></button>
+              <button type="button" class="option-card" data-value="Clio"><span class="option-key">B</span><span class="option-text">Clio</span></button>
+              <button type="button" class="option-card" data-value="MyCase"><span class="option-key">C</span><span class="option-text">MyCase</span></button>
+              <button type="button" class="option-card" data-value="CampLegal"><span class="option-key">D</span><span class="option-text">CampLegal</span></button>
+              <button type="button" class="option-card" data-value="Filevine"><span class="option-key">E</span><span class="option-text">Filevine</span></button>
+              <button type="button" class="option-card" data-value="Others"><span class="option-key">F</span><span class="option-text">Others</span></button>
+            </div>
+            <span class="field-error" id="cmsSystem-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="cmsDescription">Please describe the usage of multiple systems in a brief paragraph. Please type N/A if nothing additional to add. <span class="required-mark">*</span></label>
+            <textarea class="field-textarea" id="cmsDescription" name="cmsDescription" rows="4" data-required="true"></textarea>
+            <span class="field-error" id="cmsDescription-error"></span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Step 4: API Credentials -->
+      <div class="step" data-step="4">
+        <div class="step-content">
+          <div class="step-heading">
+            <h2 class="step-title">API Credentials</h2>
+          </div>
+
+          <div class="info-box">
+            <p><strong>How to get your API credentials</strong></p>
+            <ol>
+              <li>Log into your Case Management System account</li>
+              <li>Navigate to <strong>Settings → Integrations → API Access</strong></li>
+              <li>Generate a new API key with <strong>read/write</strong> permissions</li>
+              <li>Copy and paste the key below</li>
+            </ol>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="apiKey">API Key / Access Token <span class="required-mark">*</span></label>
+            <input class="field-input" type="text" id="apiKey" name="apiKey" data-required="true" placeholder="Paste your API key" />
+            <span class="field-error" id="apiKey-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="orgId">Organization/Account ID (Optional)</label>
+            <input class="field-input" type="text" id="orgId" name="orgId" placeholder="Your organisation ID" />
+          </div>
+
+          <p class="field-subsection">Admin Account Credentials</p>
+
+          <div class="field-group">
+            <label class="field-label" for="adminUsername">User Name <span class="required-mark">*</span></label>
+            <input class="field-input" type="email" id="adminUsername" name="adminUsername" data-required="true" data-type="email" placeholder="admin@yourfirm.com" />
+            <span class="field-error" id="adminUsername-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="adminPassword">Password <span class="required-mark">*</span></label>
+            <input class="field-input" type="password" id="adminPassword" name="adminPassword" data-required="true" placeholder="••••••••" />
+            <span class="field-error" id="adminPassword-error"></span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Step 5: Clerq Users -->
+      <div class="step" data-step="5">
+        <div class="step-content">
+          <div class="step-heading">
+            <h2 class="step-title">Clerq Users</h2>
+            <p class="step-description">Please provide a list of names and email addresses for intended users of Clerq at your firm. For the Primary Mail Processor (PMP) role please include additional contact details including telephone #.</p>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="totalUsers">Total Number of Clerq Users <span class="required-mark">*</span></label>
+            <input class="field-input" type="number" id="totalUsers" name="totalUsers" min="1" data-required="true" data-type="number" placeholder="e.g. 10" />
+            <span class="field-error" id="totalUsers-error"></span>
+          </div>
+
+          <p class="field-subsection">Primary Mail Processor</p>
+
+          <div class="field-group">
+            <label class="field-label" for="primaryName">Please provide the full name <span class="required-mark">*</span></label>
+            <input class="field-input" type="text" id="primaryName" name="primaryName" data-required="true" placeholder="Full name" />
+            <span class="field-error" id="primaryName-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="primaryPhone">Please provide contact tel# <span class="required-mark">*</span></label>
+            <div class="phone-wrapper" id="phoneWrapper">
+              <div class="phone-prefix" id="phonePrefix">
+                <span class="phone-flag fi fi-us" id="phoneFlag"></span>
+                <span class="phone-code" id="phoneCode">+1</span>
+              </div>
+              <input class="field-input phone-input" type="tel" id="primaryPhone" name="primaryPhone" data-required="true" data-type="phone" placeholder="Enter number" />
+            </div>
+            <span class="field-error" id="primaryPhone-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="primaryEmail">And the email address.</label>
+            <input class="field-input" type="email" id="primaryEmail" name="primaryEmail" data-type="email" placeholder="email@yourfirm.com" />
+            <span class="field-error" id="primaryEmail-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">User List <span class="required-mark">*</span></label>
+            <div class="user-list" id="userList"></div>
+            <button type="button" class="btn-add-row" id="addUserRow">+ Add User</button>
+            <span class="field-error" id="usersList-error"></span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Step 6: Browser & Hardware -->
+      <div class="step" data-step="6">
+        <div class="step-content">
+          <div class="step-heading">
+            <h2 class="step-title">Browser &amp; Hardware</h2>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Browser Usage Info <span class="required-mark">*</span></label>
+            <p class="field-hint">What sort of browser do you use...? Please select all the ones you will be using for Clerq.</p>
+            <div class="options-grid" data-name="browsers" data-mode="multi" data-required="true">
+              <button type="button" class="option-card" data-value="Google Chrome"><span class="option-key">A</span><span class="option-text">Google Chrome</span></button>
+              <button type="button" class="option-card" data-value="Mozilla Firefox"><span class="option-key">B</span><span class="option-text">Mozilla Firefox</span></button>
+              <button type="button" class="option-card" data-value="Microsoft Edge"><span class="option-key">C</span><span class="option-text">Microsoft Edge</span></button>
+              <button type="button" class="option-card" data-value="Apple Safari"><span class="option-key">D</span><span class="option-text">Apple Safari</span></button>
+              <button type="button" class="option-card" data-value="Others"><span class="option-key">E</span><span class="option-text">Others</span></button>
+            </div>
+            <span class="field-error" id="browsers-error"></span>
+          </div>
+
+          <p class="field-subsection">Hardware Check</p>
+
+          <div class="field-group">
+            <label class="field-label">Hardware <span class="required-mark">*</span></label>
+            <p class="field-hint">Let us know about the computer hardware usage at the firm.</p>
+            <div class="options-grid" data-name="hardware" data-mode="single" data-required="true">
+              <button type="button" class="option-card" data-value="Windows Laptop"><span class="option-key">A</span><span class="option-text">Windows Laptop</span></button>
+              <button type="button" class="option-card" data-value="Windows Desktop"><span class="option-key">B</span><span class="option-text">Windows Desktop</span></button>
+              <button type="button" class="option-card" data-value="Apple Macbook"><span class="option-key">C</span><span class="option-text">Apple Macbook</span></button>
+            </div>
+            <span class="field-error" id="hardware-error"></span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Step 7: Email System -->
+      <div class="step" data-step="7">
+        <div class="step-content">
+          <div class="step-heading">
+            <h2 class="step-title">Firm's Email System</h2>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">What email system is used by the firm</label>
+            <div class="options-grid" data-name="emailSystem" data-mode="multi">
+              <button type="button" class="option-card" data-value="Outlook"><span class="option-key">A</span><span class="option-text">Outlook</span></button>
+              <button type="button" class="option-card" data-value="Microsoft Teams"><span class="option-key">B</span><span class="option-text">Microsoft Teams</span></button>
+              <button type="button" class="option-card" data-value="Gmail"><span class="option-key">C</span><span class="option-text">Gmail</span></button>
+              <button type="button" class="option-card" data-value="Apple iCloud"><span class="option-key">D</span><span class="option-text">Apple iCloud</span></button>
+              <button type="button" class="option-card" data-value="Others"><span class="option-key">E</span><span class="option-text">Others</span></button>
+            </div>
+            <span class="field-error" id="emailSystem-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Calendar Appointments <span class="required-mark">*</span></label>
+            <p class="field-hint">Do you want calendar rules to go through your case management system or use your firms specific emails system</p>
+            <div class="options-grid" data-name="calendarPref" data-mode="single" data-required="true">
+              <button type="button" class="option-card" data-value="Emailing System"><span class="option-key">A</span><span class="option-text">Emailing System (Outlook / Google / icloud)</span></button>
+              <button type="button" class="option-card" data-value="CMS Calendar"><span class="option-key">B</span><span class="option-text">CMS Calendar (Docketwise, MyCase, CampLegal, Others)</span></button>
+              <button type="button" class="option-card" data-value="Both"><span class="option-key">C</span><span class="option-text">Both</span></button>
+              <button type="button" class="option-card" data-value="Others"><span class="option-key">D</span><span class="option-text">Others</span></button>
+            </div>
+            <span class="field-error" id="calendarPref-error"></span>
+          </div>
+
+          <p class="field-subsection">Client Communication Preferences</p>
+
+          <div class="field-group">
+            <label class="field-label">Client Communication Preferences</label>
+            <div class="options-grid" data-name="commPref" data-mode="single">
+              <button type="button" class="option-card" data-value="Email System"><span class="option-key">A</span><span class="option-text">Email System</span></button>
+              <button type="button" class="option-card" data-value="Case Management System"><span class="option-key">B</span><span class="option-text">Case Management System</span></button>
+              <button type="button" class="option-card" data-value="Portal"><span class="option-key">C</span><span class="option-text">Portal</span></button>
+              <button type="button" class="option-card" data-value="Custom"><span class="option-key">D</span><span class="option-text">Custom</span></button>
+            </div>
+            <span class="field-error" id="commPref-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="calendarRules">Calendar Rules <span class="required-mark">*</span></label>
+            <p class="field-hint">Please describe your calendar rules for appointments, court hearings, interview's so we can set them up initially for you and fine tune them over the course of the month. There is a calendar help document attached here for reference. It is also part of your onboarding email package.</p>
+            <textarea class="field-textarea" id="calendarRules" name="calendarRules" rows="5" data-required="true"></textarea>
+            <span class="field-error" id="calendarRules-error"></span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Step 8: Email Templates -->
+      <div class="step" data-step="8">
+        <div class="step-content">
+          <div class="step-heading">
+            <h2 class="step-title">What types of email templates are used by the firm..</h2>
+            <p class="step-description">Please upload the firm's preferred email templates so we can preload Clerq with firms templates</p>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Email Template Upload <span class="required-mark">*</span></label>
+            <div class="upload-zone" id="uploadZone" data-name="emailTemplates" data-required="true">
+              <input type="file" id="emailTemplates" name="emailTemplates" class="upload-input" multiple accept=".doc,.docx,.pdf,.txt,.eml,.html" />
+              <div class="upload-content">
+                <div class="upload-icon">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                  </svg>
+                </div>
+                <p class="upload-label">Drag &amp; drop files here or <span class="upload-browse">browse</span></p>
+                <p class="upload-formats">Accepted: .doc, .docx, .pdf, .txt, .eml, .html</p>
+              </div>
+              <div class="upload-files" id="uploadFileList"></div>
+            </div>
+            <span class="field-error" id="emailTemplates-error"></span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Step 9: USCIS and EOIR -->
+      <div class="step" data-step="9">
+        <div class="step-content">
+          <div class="step-heading">
+            <h2 class="step-title">USCIS &amp; EOIR Accounts</h2>
+          </div>
+
+          <p class="field-subsection">USCIS Account Info</p>
+
+          <div class="field-group">
+            <label class="field-label" for="uscisCount">How many accounts does the firm have.. <span class="required-mark">*</span></label>
+            <input class="field-input" type="number" id="uscisCount" name="uscisCount" min="0" data-required="true" data-type="number" placeholder="e.g. 3" />
+            <span class="field-error" id="uscisCount-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="uscisLogin">Please provide USCIS Login info for the Attorneys accounts <span class="required-mark">*</span></label>
+            <textarea class="field-textarea" id="uscisLogin" name="uscisLogin" rows="4" data-required="true"></textarea>
+            <span class="field-error" id="uscisLogin-error"></span>
+          </div>
+
+          <p class="field-subsection">EOIR Account Info</p>
+
+          <div class="field-group">
+            <label class="field-label" for="eoirCount">How many accounts does the firm have.. <span class="required-mark">*</span></label>
+            <input class="field-input" type="number" id="eoirCount" name="eoirCount" min="0" data-required="true" data-type="number" placeholder="e.g. 2" />
+            <span class="field-error" id="eoirCount-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="eoirLogin">Please provide EOIR Login info for the Attorneys accounts <span class="required-mark">*</span></label>
+            <textarea class="field-textarea" id="eoirLogin" name="eoirLogin" rows="4" data-required="true"></textarea>
+            <span class="field-error" id="eoirLogin-error"></span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Step 10: Thank You -->
+      <div class="step" data-step="10">
+        <div class="step-content intro-content">
+          <div class="thankyou-icon">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <h1 class="step-title">Thank you for sharing this info!</h1>
+          <p class="step-description">
+            The info is forwarded to our onboarding team to start building your custom integration!
+            If we have any additional questions the team will reach out via email and or phone call.
+          </p>
+          <p class="step-hint">Have a great day!</p>
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="form-footer" id="formFooter">
+      <div class="intro-footer-contact">
+        <span>Questions?</span>
+        <a href="mailto:masaf@clerqlegal.com">masaf@clerqlegal.com</a>
+      </div>
+      <button type="button" class="btn btn-prev" id="btnPrev">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        Previous
+      </button>
+      <div class="intro-footer-cta"></div>
+      <button type="button" class="btn btn-next" id="btnNext">
+        Next
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </footer>
+    </div>
+
+  </div>
+
+  <script src="form.js"></script>
+</body>
+</html>
