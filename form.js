@@ -29,8 +29,8 @@
     if (type === 'phone') {
       const digits = val.replace(/\D/g, '');
       if (required && !val) return setError(field, errorEl, 'This field is required.');
-      if (val && (digits.length < 7 || digits.length > 11))
-        return setError(field, errorEl, 'Phone number must be 7–11 digits.');
+      if (val && digits.length !== 10)
+        return setError(field, errorEl, 'Phone number must be exactly 10 digits (excluding country code).');
       clearError(field, errorEl);
       return true;
     }
@@ -148,7 +148,7 @@
     if (!isThanks) {
       const isSecondLast = currentStep === TOTAL_STEPS - 1;
       const label = isFirst ? 'Start' : isSecondLast ? 'Submit' : 'Next';
-      btnNext.innerHTML = label + ' <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>';
+      btnNext.querySelector('.btn-text').textContent = label;
     }
 
     // Update progress dots
@@ -256,6 +256,23 @@
       showError(errorEl, 'Please add at least one user.');
       return false;
     }
+    // Validate email fields
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let valid = true;
+    rows.forEach(r => {
+      const emailInput = r.querySelector('input[type="email"]');
+      const val = emailInput.value.trim();
+      if (val && !emailRegex.test(val)) {
+        emailInput.classList.add('has-error');
+        valid = false;
+      } else {
+        emailInput.classList.remove('has-error');
+      }
+    });
+    if (!valid) {
+      showError(errorEl, 'Please enter valid email addresses.');
+      return false;
+    }
     showError(errorEl, '');
     return true;
   }
@@ -318,13 +335,20 @@
       }
     }
 
+    const MAX_FILES = 5;
+
     function addFiles(fileArr) {
       Array.from(fileArr).forEach(f => {
+        if (uploadedFiles[name].length >= MAX_FILES) return;
         if (!uploadedFiles[name].find(x => x.name === f.name && x.size === f.size)) {
           uploadedFiles[name].push(f);
         }
       });
       renderFiles();
+      if (uploadedFiles[name].length >= MAX_FILES) {
+        const errorEl = document.getElementById(`${name}-error`);
+        showError(errorEl, `Maximum ${MAX_FILES} files allowed.`);
+      }
     }
 
     input.addEventListener('change', () => {
@@ -346,29 +370,115 @@
     });
   });
 
-  // ── Phone: country detection + strip letters ──────────────────────────────
-  const DIAL_CODES = {
-    US:'+1',CA:'+1',GB:'+44',AU:'+61',DE:'+49',FR:'+33',IN:'+91',
-    MX:'+52',BR:'+55',JP:'+81',CN:'+86',KR:'+82',SG:'+65',AE:'+971',
-    SA:'+966',PK:'+92',NG:'+234',ZA:'+27',EG:'+20',PH:'+63',ID:'+62',
-    MY:'+60',TH:'+66',TR:'+90',IT:'+39',ES:'+34',NL:'+31',SE:'+46',
-    NO:'+47',DK:'+45',CH:'+41',AT:'+43',BE:'+32',PL:'+48',PT:'+351',
-    NZ:'+64',AR:'+54',CL:'+56',CO:'+57',IL:'+972',GH:'+233',KE:'+254',
-  };
+  // ── Phone: country dropdown + detection ─────────────────────────────────
+  const COUNTRIES = [
+    {iso:'US',name:'United States',code:'+1'},{iso:'CA',name:'Canada',code:'+1'},
+    {iso:'GB',name:'United Kingdom',code:'+44'},{iso:'AU',name:'Australia',code:'+61'},
+    {iso:'DE',name:'Germany',code:'+49'},{iso:'FR',name:'France',code:'+33'},
+    {iso:'IN',name:'India',code:'+91'},{iso:'MX',name:'Mexico',code:'+52'},
+    {iso:'BR',name:'Brazil',code:'+55'},{iso:'JP',name:'Japan',code:'+81'},
+    {iso:'CN',name:'China',code:'+86'},{iso:'KR',name:'South Korea',code:'+82'},
+    {iso:'SG',name:'Singapore',code:'+65'},{iso:'AE',name:'UAE',code:'+971'},
+    {iso:'SA',name:'Saudi Arabia',code:'+966'},{iso:'PK',name:'Pakistan',code:'+92'},
+    {iso:'NG',name:'Nigeria',code:'+234'},{iso:'ZA',name:'South Africa',code:'+27'},
+    {iso:'EG',name:'Egypt',code:'+20'},{iso:'PH',name:'Philippines',code:'+63'},
+    {iso:'ID',name:'Indonesia',code:'+62'},{iso:'MY',name:'Malaysia',code:'+60'},
+    {iso:'TH',name:'Thailand',code:'+66'},{iso:'TR',name:'Turkey',code:'+90'},
+    {iso:'IT',name:'Italy',code:'+39'},{iso:'ES',name:'Spain',code:'+34'},
+    {iso:'NL',name:'Netherlands',code:'+31'},{iso:'SE',name:'Sweden',code:'+46'},
+    {iso:'NO',name:'Norway',code:'+47'},{iso:'DK',name:'Denmark',code:'+45'},
+    {iso:'CH',name:'Switzerland',code:'+41'},{iso:'AT',name:'Austria',code:'+43'},
+    {iso:'BE',name:'Belgium',code:'+32'},{iso:'PL',name:'Poland',code:'+48'},
+    {iso:'PT',name:'Portugal',code:'+351'},{iso:'NZ',name:'New Zealand',code:'+64'},
+    {iso:'AR',name:'Argentina',code:'+54'},{iso:'CL',name:'Chile',code:'+56'},
+    {iso:'CO',name:'Colombia',code:'+57'},{iso:'IL',name:'Israel',code:'+972'},
+    {iso:'GH',name:'Ghana',code:'+233'},{iso:'KE',name:'Kenya',code:'+254'},
+    {iso:'IE',name:'Ireland',code:'+353'},{iso:'RU',name:'Russia',code:'+7'},
+    {iso:'UA',name:'Ukraine',code:'+380'},{iso:'BD',name:'Bangladesh',code:'+880'},
+    {iso:'LK',name:'Sri Lanka',code:'+94'},{iso:'NP',name:'Nepal',code:'+977'},
+    {iso:'VN',name:'Vietnam',code:'+84'},{iso:'PE',name:'Peru',code:'+51'},
+  ];
 
+  const phoneFlag     = document.getElementById('phoneFlag');
+  const phoneCode     = document.getElementById('phoneCode');
+  const phonePrefix   = document.getElementById('phonePrefix');
+  const countryDD     = document.getElementById('countryDropdown');
+  const countryList   = document.getElementById('countryList');
+  const countrySearch = document.getElementById('countrySearch');
+
+  function setCountry(iso, code) {
+    phoneFlag.className = `phone-flag fi fi-${iso.toLowerCase()}`;
+    phoneCode.textContent = code;
+  }
+
+  function renderCountryList(filter) {
+    const q = (filter || '').toLowerCase();
+    const filtered = q
+      ? COUNTRIES.filter(c => c.name.toLowerCase().includes(q) || c.code.includes(q) || c.iso.toLowerCase().includes(q))
+      : COUNTRIES;
+    countryList.innerHTML = filtered.map(c =>
+      `<div class="country-item" data-iso="${c.iso}" data-code="${c.code}">
+        <span class="country-item-flag fi fi-${c.iso.toLowerCase()}"></span>
+        <span>${c.name}</span>
+        <span class="country-item-code">${c.code}</span>
+      </div>`
+    ).join('');
+  }
+
+  function openCountryDropdown() {
+    countryDD.classList.add('open');
+    countrySearch.value = '';
+    renderCountryList('');
+    setTimeout(() => countrySearch.focus(), 0);
+  }
+
+  function closeCountryDropdown() {
+    countryDD.classList.remove('open');
+  }
+
+  phonePrefix.addEventListener('click', e => {
+    e.stopPropagation();
+    if (countryDD.classList.contains('open')) {
+      closeCountryDropdown();
+    } else {
+      openCountryDropdown();
+    }
+  });
+
+  countrySearch.addEventListener('input', () => {
+    renderCountryList(countrySearch.value);
+  });
+
+  countrySearch.addEventListener('click', e => e.stopPropagation());
+
+  countryList.addEventListener('click', e => {
+    e.stopPropagation();
+    const item = e.target.closest('.country-item');
+    if (!item) return;
+    setCountry(item.dataset.iso, item.dataset.code);
+    closeCountryDropdown();
+  });
+
+  document.addEventListener('click', e => {
+    if (!phonePrefix.contains(e.target)) closeCountryDropdown();
+  });
+
+  // Auto-detect country via IP
   fetch('https://ipinfo.io/json?token=')
     .then(r => r.json())
     .then(data => {
-      const iso  = (data.country || 'US').toUpperCase();
-      const code = DIAL_CODES[iso] || '+1';
-      document.getElementById('phoneFlag').className = `phone-flag fi fi-${iso.toLowerCase()}`;
-      document.getElementById('phoneCode').textContent = code;
+      const iso = (data.country || 'US').toUpperCase();
+      const match = COUNTRIES.find(c => c.iso === iso);
+      setCountry(iso, match ? match.code : '+1');
     })
     .catch(() => {});
 
+  // Strip non-digit chars and enforce max 10 digits
   document.querySelectorAll('input[data-type="phone"]').forEach(el => {
     el.addEventListener('input', () => {
-      el.value = el.value.replace(/[^\d\s\-(). ]/g, '');
+      let digits = el.value.replace(/\D/g, '');
+      if (digits.length > 10) digits = digits.slice(0, 10);
+      el.value = digits;
     });
   });
 
